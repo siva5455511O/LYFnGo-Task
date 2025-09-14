@@ -26,14 +26,14 @@ function Signup() {
     e.preventDefault();
     try {
       const res = await axios.post(RigesterApi, data);
-      toast.success(res.data.msg || "Signup successful! 🎉", {
+      toast.success(res.data.msg || "Signup successful!", {
         position: "top-center",
         autoClose: 2000,
       });
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => navigate("/"), 2000);
     } catch (error) {
       toast.error(
-        error.response?.data?.msg || "Signup failed. Try again! ❌",
+        error.response?.data?.msg || "Signup failed. Try again!",
         {
           position: "top-center",
           autoClose: 3000,
@@ -61,7 +61,7 @@ function Signup() {
             color: "primary.main",
           }}
         >
-          🚀 Create Account
+          Create Account
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit}>
@@ -115,7 +115,7 @@ function Signup() {
           <Link
             component="button"
             variant="body1"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/")}
             sx={{
               fontWeight: "bold",
               color: "primary.main",

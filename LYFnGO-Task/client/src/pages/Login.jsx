@@ -29,7 +29,7 @@ function Login() {
       // ✅ store JWT token in localStorage
       localStorage.setItem("token", res.data.token);
 
-      toast.success(res.data.msg || "Login successful! 🎉", {
+      toast.success(res.data.msg || "Login successful!", {
         position: "top-center",
         autoClose: 2000,
       });
@@ -37,7 +37,7 @@ function Login() {
       // redirect to dashboard
       setTimeout(() => navigate("/dashboard"), 2000);
     } catch (error) {
-      toast.error(error.response?.data?.msg || "Login failed! ❌", {
+      toast.error(error.response?.data?.msg || "Login failed!", {
         position: "top-center",
         autoClose: 3000,
       });
@@ -63,7 +63,7 @@ function Login() {
             color: "primary.main",
           }}
         >
-          🔑 Login
+           Login
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit}>
@@ -110,7 +110,7 @@ function Login() {
           <Link
             component="button"
             variant="body1"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/signup")}
             sx={{
               fontWeight: "bold",
               color: "primary.main",

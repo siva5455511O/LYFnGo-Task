@@ -5,7 +5,6 @@ import Signup from "./pages/Signup";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
-import TaskTable from "./components/TaskTable";
 import TaskForm from "./components/TaskForm";
 
 function App() {
@@ -13,32 +12,32 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/task/new"
-          element={
-            <ProtectedRoute>
-              <TaskForm/>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/task/edit/:id"
-          element={
-            <ProtectedRoute>
-              <TaskForm />
-            </ProtectedRoute>
-          }
-        />
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/task/new"
+            element={
+              <ProtectedRoute>
+                <TaskForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/task/edit/:id"
+            element={
+              <ProtectedRoute>
+                <TaskForm />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
       <ToastContainer />

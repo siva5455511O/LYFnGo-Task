@@ -140,7 +140,7 @@ function TaskForm() {
           return;
         }
 
-        toast.success("Task updated ✅");
+        toast.success("Task updated ");
       } else {
         const postCandidates = [
           PostTaskApi,
@@ -173,7 +173,7 @@ function TaskForm() {
           return;
         }
 
-        toast.success("Task created 🎉");
+        toast.success("Task created ");
       }
 
       navigate("/dashboard");
@@ -204,7 +204,7 @@ function TaskForm() {
             textAlign="center"
             color="primary"
           >
-            {isEdit ? "✏️ Edit Task" : "🆕 New Task"}
+            {isEdit ? " Edit Task" : " New Task"}
           </Typography>
 
           {loading ? (

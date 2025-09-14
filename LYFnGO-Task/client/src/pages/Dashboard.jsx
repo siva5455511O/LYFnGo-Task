@@ -32,7 +32,7 @@ function Dashboard() {
       });
       setTasks(res.data);
     } catch (error) {
-      toast.error("Failed to load tasks ❌");
+      toast.error("Failed to load tasks ");
     }
   };
 
@@ -41,10 +41,10 @@ function Dashboard() {
       await axios.delete(`${DeleteTaskApi}/${id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-      toast.success("Task deleted ✅");
+      toast.success("Task deleted ");
       fetchTasks();
     } catch (error) {
-      toast.error("Delete failed ❌");
+      toast.error("Delete failed ");
     }
   };
 
@@ -144,7 +144,7 @@ function Dashboard() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={4} align="center">
-                    No tasks found 🚀
+                    No tasks found 
                   </TableCell>
                 </TableRow>
               )}

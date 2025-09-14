@@ -59,7 +59,7 @@ const LoginUser = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error("Login error:", error.message); // 👈 shows actual error
+    console.error("Login error:", error.message); 
     res.status(500).json({ msg: "Server error" });
   }
 };
