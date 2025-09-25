@@ -8,7 +8,7 @@ const LoginApi = "http://localhost:4000/userapi/loginUser";
 
 const GetTaskApi = "http://localhost:4000/taskapi/gettask";
 
-const GetTaskByIdApi = "http://localhost:4000/taskapi/gettask";
+const GetTaskByIdApi = "http://localhost:4000/taskapi/gettasks";
 
 const PostTaskApi = "http://localhost:4000/taskapi/posttask";
 

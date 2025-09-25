@@ -26,7 +26,7 @@ function Login() {
     try {
       const res = await axios.post(LoginApi, data);
 
-      // ✅ store JWT token in localStorage
+      
       localStorage.setItem("token", res.data.token);
 
       toast.success(res.data.msg || "Login successful!", {
@@ -34,7 +34,7 @@ function Login() {
         autoClose: 2000,
       });
 
-      // redirect to dashboard
+     
       setTimeout(() => navigate("/dashboard"), 2000);
     } catch (error) {
       toast.error(error.response?.data?.msg || "Login failed!", {

@@ -13,9 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// import the endpoints you already have
 import {
-  GetTaskApi,
   GetTaskByIdApi,
   PostTaskApi,
   UpdateTaskApi,
@@ -34,61 +32,31 @@ function TaskForm() {
     status: "Pending",
   });
 
-  // helper to get token + headers
   const getAuthHeaders = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
+
 
   useEffect(() => {
     const fetchTask = async () => {
       if (!isEdit) return;
       setLoading(true);
 
-      // candidate GET URLs (tries common shapes)
-      const candidates = [
-        ...(GetTaskByIdApi ? [`${GetTaskByIdApi}/${id}`] : []),
-        ...(GetTaskApi ? [`${GetTaskApi}/${id}`] : []),
-        `${GetTaskApi}/gettask/${id}`,
-        `${GetTaskApi}?id=${id}`,
-        `${GetTaskApi}/${id}/get`,
-        `${GetTaskApi}/${id}/`,
-      ];
+      try {
+        const res = await axios.get(`${GetTaskByIdApi}/${id}`, getAuthHeaders());
+        const taskData = res.data.task || res.data;
 
-      let res = null;
-      for (const url of candidates) {
-        if (!url) continue;
-        try {
-          console.log("[TaskForm] trying GET", url);
-          res = await axios.get(url, getAuthHeaders());
-          console.log("[TaskForm] GET success from", url, res.data);
-          break;
-        } catch (err) {
-          console.warn(
-            "[TaskForm] GET failed for",
-            url,
-            err?.response?.status,
-            err?.response?.data || err.message
-          );
-        }
-      }
-
-      if (!res) {
-        toast.error("Failed to load task — check console (GET attempts).");
+        setTask({
+          title: taskData.title || "",
+          description: taskData.description || "",
+          status: taskData.status || "Pending",
+        });
+      } catch (err) {
+        console.error("Fetch task error:", err?.response || err.message);
+        toast.error("Failed to load task");
+      } finally {
         setLoading(false);
-        return;
       }
-
-      let taskData = res.data;
-      if (taskData?.task) taskData = taskData.task;
-      if (Array.isArray(taskData)) taskData = taskData[0] || {};
-
-      setTask({
-        title: taskData.title || "",
-        description: taskData.description || "",
-        status: taskData.status || "Pending",
-      });
-
-      setLoading(false);
     };
 
     fetchTask();
@@ -97,88 +65,25 @@ function TaskForm() {
   const handleChange = (e) =>
     setTask({ ...task, [e.target.name]: e.target.value });
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const headers = getAuthHeaders();
-
     try {
       if (isEdit) {
-        const updateCandidates = [
-          `${UpdateTaskApi}/${id}`,
-          `${UpdateTaskApi}/updatetask/${id}`,
-          `${UpdateTaskApi}/updatetask`,
-          `${UpdateTaskApi}/update/${id}`,
-        ];
-
-        let updated = false;
-        for (const url of updateCandidates) {
-          try {
-            console.log("[TaskForm] trying PUT", url);
-            const body =
-              url.endsWith("/updatetask") && !url.endsWith(`/${id}`)
-                ? { ...task, id }
-                : task;
-            const res = await axios.put(url, body, headers);
-            console.log("[TaskForm] PUT success from", url, res.data);
-            updated = true;
-            break;
-          } catch (err) {
-            console.warn(
-              "[TaskForm] PUT failed for",
-              url,
-              err?.response?.status,
-              err?.response?.data || err.message
-            );
-          }
-        }
-
-        if (!updated) {
-          toast.error("Update failed — see console for attempted URLs.");
-          setLoading(false);
-          return;
-        }
-
-        toast.success("Task updated ");
+        // Update Task
+        await axios.put(`${UpdateTaskApi}/${id}`, task, getAuthHeaders());
+        toast.success("Task updated successfully");
       } else {
-        const postCandidates = [
-          PostTaskApi,
-          `${GetTaskApi}`,
-          `${GetTaskApi}/posttask`,
-          `${UpdateTaskApi}/posttask`,
-        ];
-
-        let created = false;
-        for (const url of postCandidates) {
-          if (!url) continue;
-          try {
-            console.log("[TaskForm] trying POST", url);
-            const res = await axios.post(url, task, headers);
-            console.log("[TaskForm] POST success from", url, res.data);
-            created = true;
-            break;
-          } catch (err) {
-            console.warn(
-              "[TaskForm] POST failed for",
-              url,
-              err?.response?.status
-            );
-          }
-        }
-
-        if (!created) {
-          toast.error("Create failed — see console for attempted URLs.");
-          setLoading(false);
-          return;
-        }
-
-        toast.success("Task created ");
+        // Create Task
+        await axios.post(PostTaskApi, task, getAuthHeaders());
+        toast.success("Task created successfully");
       }
 
       navigate("/dashboard");
     } catch (err) {
-      console.error("Save task final error:", err?.response || err.message);
+      console.error("Save task error:", err?.response || err.message);
       toast.error(err?.response?.data?.msg || "Error saving task");
     } finally {
       setLoading(false);
@@ -204,7 +109,7 @@ function TaskForm() {
             textAlign="center"
             color="primary"
           >
-            {isEdit ? " Edit Task" : " New Task"}
+            {isEdit ? "Edit Task" : "New Task"}
           </Typography>
 
           {loading ? (

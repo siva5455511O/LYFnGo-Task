@@ -8,7 +8,7 @@ const singUp = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser)
-      return res.status(400).json({ msg: "Username already exists" });
+      return res.status(400).json({ msg: "Username or email already exists" });
 
     const hasspassword = await bcrypt.hash(password, 7);
 
